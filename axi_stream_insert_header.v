@@ -1,25 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: houyajie
-// 
-// Create Date: 2023/04/18 09:17:25
-// Design Name: 
-// Module Name: axi_stream_insert_header
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module axi_stream_insert_header #(
 parameter DATA_WD = 32,
 parameter DATA_BYTE_WD = DATA_WD / 8
@@ -47,12 +26,12 @@ output ready_insert
 
 reg last_in_r1;
 wire last_in_pulse_p;
-reg [DATA_WD-1 : 0] data_out_r1;//»º´æÊı¾İ
+reg [DATA_WD-1 : 0] data_out_r1;//ç¼“å­˜æ•°æ®
 reg [DATA_BYTE_WD-1 : 0] keep_in_r;
 wire axis_ready_in;
 
 
-//////////////////ÊµÏÖdata_out´«Êä//////////////////////////
+//////////////////å®ç°data_outä¼ è¾“//////////////////////////
 
 always@(posedge clk or negedge rst_n)
 if(!rst_n)
@@ -72,10 +51,10 @@ begin
     data_out_r1 <= data_in;
 end
 else
-    data_out_r1 <= data_out_r1;
+    data_out_r1 <= data_out_r1;//ä½¿ç”¨ä¸Šå‡æ²¿åˆ¤æ–­
 
 
-//////////////ÊµÏÖheaderÊı¾İ´¦Àí/////////////////////////////
+//////////////å®ç°headeræ•°æ®å¤„ç†/////////////////////////////
 reg [DATA_WD-1 : 0]header_out_r;
 reg insert_flag;
 reg [DATA_BYTE_WD-1 : 0] keep_insert_out_r;
@@ -97,7 +76,7 @@ begin
     keep_insert_out_r <= keep_insert;
 end
 
-////////////header²åÈëµ½data////////////////
+////////////headeræ’å…¥åˆ°data////////////////
 
 reg [DATA_WD-1 : 0]header_data_out_r;
 always@(posedge clk or negedge rst_n)
@@ -144,7 +123,7 @@ begin
 end
 assign ready_insert=s_ready_insert;
 
-//////////ÅĞ¶Ïvalid_out
+//////////åˆ¤æ–­valid_out
 reg [1:0]insert_flag_r;
 always@(posedge clk or negedge rst_n)
 begin
@@ -156,7 +135,7 @@ end
 assign neg_flag = ~insert_flag_r[1]&insert_flag_r[0];
 assign valid_out = neg_flag? 0 : 1;
 
-//////////ÅĞ¶Ïkeep_outÊä³ö
+//////////åˆ¤æ–­keep_outè¾“å‡º
 wire last_out_p;
 reg [DATA_BYTE_WD-1 : 0] keep_out_r;
 always@(posedge clk or negedge rst_n)
@@ -179,7 +158,7 @@ begin
 end
 assign keep_out = keep_out_r;
 
-/////////ÅĞ¶Ïlast_out
+/////////åˆ¤æ–­last_out
 reg [1:0]last_out_r;
 
 always@(posedge clk or negedge rst_n)
